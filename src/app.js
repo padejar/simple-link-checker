@@ -1,20 +1,11 @@
-const express = require('express');
-const bodyParser = require('body-parser');
 const { default: puppeteer } = require('puppeteer');
 const moment = require('moment/moment');
 
-const app = express();
-const port = 3000;
+const index = (_, res) => {
+    return res.render(__dirname + '/templates/index.ejs');
+};
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/screenshots', express.static(__dirname + '/screenshots'));
-app.set('view engine', 'ejs');
-
-app.get('/', (_, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
-
-app.post('/check-link', async (req, res) => {
+const checkLink = async (req, res) => {
     const { url } = req.body;
 
     if (!isValidURL(url)) {
@@ -22,12 +13,8 @@ app.post('/check-link', async (req, res) => {
     }
 
     const screenshotPath = await urlChecker(url);
-    return res.render(__dirname + '/result.ejs', { screenshotPath });
-});
-
-app.listen(port, () => {
-    console.log(`Link checker is running on port ${port}`);
-});
+    return res.render(__dirname + '/templates/result.ejs', { screenshotPath });
+};
 
 const urlChecker = async (url) => {
     try {
@@ -86,4 +73,9 @@ function isValidURL(url) {
       /^(https?:\/\/)?([a-z\d]+([a-z\d-]*[a-z\d])*\.)+[a-z]{2,}(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
     );
     return pattern.test(url);
+}
+
+module.exports = function(app) {
+    app.get('/', index);
+    app.post('/check-link', checkLink);
 }
