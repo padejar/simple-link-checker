@@ -6,6 +6,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/screenshots', express.static(__dirname + '/screenshots'));
+app.use('/assets', express.static(__dirname + '/public/assets'));
 app.set('view engine', 'ejs');
 
 require('./src/app')(app);

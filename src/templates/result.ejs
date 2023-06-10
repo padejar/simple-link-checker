@@ -4,10 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .header {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .img-result {
+            width: 1024px;
+            border: 1px solid #eee;
+        }
+    </style>
 </head>
 <body>
-    Here's the result: <br />
-    <img src="<%= screenshotPath %>" alt="result" /> <br />
-    <a href="/">Check another link</a>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="header">Here's the result</h3>
+                
+                <div class="mx-auto" style="max-width: 1024px; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+                    <img src="<%= screenshotPath %>" class="img-result" alt="result" /> <br />
+                </div>
+                <div style="text-align: center;">
+                    <a href="/">Check another link</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
