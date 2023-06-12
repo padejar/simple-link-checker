@@ -1,4 +1,7 @@
-const waitForNetworkIdle = async (page, timeout = 0, maxInflightRequest = 0) => {
+const { Upload } = require("@aws-sdk/lib-storage");
+const { S3Client, S3 } = require("@aws-sdk/client-s3");
+
+const waitForNetworkIdle = async (page, timeout = 0, maxInflightRequests = 0) => {
     page.on('request', onRequestStarted);
     page.on('requestfinished', onRequestFinished);
     page.on('requestfailed', onRequestFinished);
@@ -35,7 +38,35 @@ function isValidURL(url) {
     return pattern.test(url);
 }
 
+async function uploadToS3 (imageBuffer, filename) {
+    try {
+        const client = new S3Client({
+            credentials: {
+                accessKeyId: 'AKIAZOBFQL4O5GV2K4VR',
+                secretAccessKey: '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',
+            },
+            region: 'ap-southeast-1',
+        });
+
+        const upload = new Upload({
+            client,
+            params: {
+                ACL: 'public-read',
+                Bucket: 'link-checker-screenshots',
+                Key: filename,
+                Body: imageBuffer,
+            }
+        });
+
+        const result = await upload.done();
+        return result.Location;
+    } catch (e) {
+        console.error(e);
+    }
+}
+
 module.exports = {
     waitForNetworkIdle,
     isValidURL,
+    uploadToS3,
 }

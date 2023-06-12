@@ -1,6 +1,6 @@
 const { default: puppeteer } = require('puppeteer');
 const moment = require('moment/moment');
-const { isValidURL, waitForNetworkIdle } = require('./utils');
+const { isValidURL, waitForNetworkIdle, uploadToS3 } = require('./utils');
 
 const index = (_, res) => {
     return res.render(__dirname + '/templates/index.ejs');
@@ -32,11 +32,15 @@ const urlChecker = async (url) => {
 
         let filename = url.replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase();
         filename = `${moment().format('YYYYMMDDHHmmss')}-result-for-${filename}.png`;
-        const path = `./screenshots/${filename}`;
 
-        await page.screenshot({ path, fullPage: true });
+        const screenshot = await page.screenshot({ 
+            type: "png",
+            omitBackground: true,
+         });
 
-        return `screenshots/${filename}`;
+        const s3Upload = await uploadToS3(screenshot, filename);
+
+        return s3Upload;
     } catch (e) {
         console.error(e);
     }
