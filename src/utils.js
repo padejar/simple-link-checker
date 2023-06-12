@@ -39,12 +39,16 @@ function isValidURL(url) {
 }
 
 async function uploadToS3 (imageBuffer, filename) {
+    const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+    const secretAccessKey = process.env.AWS_SCREET_ACCESS_KEY;
+    const region = process.env.AWS_S3_REGION;
+
     const client = new S3Client({
         credentials: {
-            accessKeyId: 'AKIAZOBFQL4O5GV2K4VR',
-            secretAccessKey: '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',
+            accessKeyId,
+            secretAccessKey,
         },
-        region: 'ap-southeast-1',
+        region,
     });
 
     const upload = new Upload({
