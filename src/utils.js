@@ -39,30 +39,26 @@ function isValidURL(url) {
 }
 
 async function uploadToS3 (imageBuffer, filename) {
-    try {
-        const client = new S3Client({
-            credentials: {
-                accessKeyId: 'AKIAZOBFQL4O5GV2K4VR',
-                secretAccessKey: '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',
-            },
-            region: 'ap-southeast-1',
-        });
+    const client = new S3Client({
+        credentials: {
+            accessKeyId: 'AKIAZOBFQL4O5GV2K4VR',
+            secretAccessKey: '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',
+        },
+        region: 'ap-southeast-1',
+    });
 
-        const upload = new Upload({
-            client,
-            params: {
-                ACL: 'public-read',
-                Bucket: 'link-checker-screenshots',
-                Key: filename,
-                Body: imageBuffer,
-            }
-        });
+    const upload = new Upload({
+        client,
+        params: {
+            ACL: 'public-read',
+            Bucket: 'link-checker-screenshots',
+            Key: filename,
+            Body: imageBuffer,
+        }
+    });
 
-        const result = await upload.done();
-        return result.Location;
-    } catch (e) {
-        console.error(e);
-    }
+    const result = await upload.done();
+    return result.Location;
 }
 
 module.exports = {

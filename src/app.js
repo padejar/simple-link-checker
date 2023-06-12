@@ -13,11 +13,14 @@ const checkLink = async (req, res) => {
         return res.send('Not a valid url!').status(402);
     }
 
-    const screenshotPath = await urlChecker(url);
+    const screenshotPath = await screenShotWeb(url);
+
+    if (!screenshotPath) return res.status(500);
+
     return res.render(__dirname + '/templates/result.ejs', { screenshotPath });
 };
 
-const urlChecker = async (url) => {
+const screenShotWeb = async (url) => {
     try {
         const browser = await puppeteer.launch({
             args: ['--no-sandbox'],
